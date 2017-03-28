@@ -111,6 +111,9 @@ var Ng2AutoCompleteComponent = (function () {
         if (this.isSrcArr()) {
             this.isLoading = false;
             this.filteredList = this.autoComplete.filter(this.source, keyword, this.matchFormatted);
+            if (this.acceptUserInput) {
+                this.filteredList.unshift(keyword);
+            }
             if (this.maxNumList) {
                 this.filteredList = this.filteredList.slice(0, this.maxNumList);
             }
@@ -125,6 +128,9 @@ var Ng2AutoCompleteComponent = (function () {
                         paths.forEach(function (prop) { return resp = resp[prop]; });
                     }
                     _this.filteredList = resp;
+                    if (_this.acceptUserInput) {
+                        _this.filteredList.unshift(keyword);
+                    }
                     if (_this.maxNumList) {
                         _this.filteredList = _this.filteredList.slice(0, _this.maxNumList);
                     }
@@ -135,6 +141,9 @@ var Ng2AutoCompleteComponent = (function () {
                 // remote source
                 this.autoComplete.getRemoteData(keyword).subscribe(function (resp) {
                     _this.filteredList = resp;
+                    if (_this.acceptUserInput) {
+                        _this.filteredList.unshift(keyword);
+                    }
                     if (_this.maxNumList) {
                         _this.filteredList = _this.filteredList.slice(0, _this.maxNumList);
                     }
@@ -167,10 +176,10 @@ var Ng2AutoCompleteComponent = (function () {
                 },] },
     ];
     /** @nocollapse */
-    Ng2AutoCompleteComponent.ctorParameters = [
+    Ng2AutoCompleteComponent.ctorParameters = function () { return [
         { type: core_1.ElementRef, },
         { type: ng2_auto_complete_1.Ng2AutoComplete, },
-    ];
+    ]; };
     Ng2AutoCompleteComponent.propDecorators = {
         'listFormatter': [{ type: core_1.Input, args: ["list-formatter",] },],
         'source': [{ type: core_1.Input, args: ["source",] },],
