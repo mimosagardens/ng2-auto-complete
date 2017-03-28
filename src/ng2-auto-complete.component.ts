@@ -163,12 +163,12 @@ export class Ng2AutoCompleteComponent implements OnInit {
         this.autoCompleteInput.nativeElement.focus()
       }
       if (this.showDropdownOnInit) {
-        this.showDropdownList({target: {value: ''}});
+        this.showDropdownList({ target: { value: '' } });
       }
     });
   }
 
-  reloadListInDelay = (evt: any): void  => {
+  reloadListInDelay = (evt: any): void => {
     let delayMs = this.isSrcArr() ? 10 : 500;
     let keyword = evt.target.value;
 
@@ -204,6 +204,9 @@ export class Ng2AutoCompleteComponent implements OnInit {
     if (this.isSrcArr()) {    // local source
       this.isLoading = false;
       this.filteredList = this.autoComplete.filter(this.source, keyword, this.matchFormatted);
+      if (this.acceptUserInput) {
+        this.filteredList.unshift(keyword);
+      }
       if (this.maxNumList) {
         this.filteredList = this.filteredList.slice(0, this.maxNumList);
       }
@@ -217,11 +220,15 @@ export class Ng2AutoCompleteComponent implements OnInit {
           resp => {
 
             if (this.pathToData) {
+
               let paths = this.pathToData.split(".");
               paths.forEach(prop => resp = resp[prop]);
             }
 
             this.filteredList = resp;
+            if (this.acceptUserInput) {
+              this.filteredList.unshift(keyword);
+            }
             if (this.maxNumList) {
               this.filteredList = this.filteredList.slice(0, this.maxNumList);
             }
@@ -233,11 +240,14 @@ export class Ng2AutoCompleteComponent implements OnInit {
         // remote source
 
         this.autoComplete.getRemoteData(keyword).subscribe(resp => {
-            this.filteredList = (<any>resp);
-            if (this.maxNumList) {
-              this.filteredList = this.filteredList.slice(0, this.maxNumList);
-            }
-          },
+          this.filteredList = (<any>resp);
+          if (this.acceptUserInput) {
+            this.filteredList.unshift(keyword);
+          }
+          if (this.maxNumList) {
+            this.filteredList = this.filteredList.slice(0, this.maxNumList);
+          }
+        },
           error => null,
           () => this.isLoading = false // complete
         );
