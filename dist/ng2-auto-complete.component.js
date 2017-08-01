@@ -46,7 +46,15 @@ var Ng2AutoCompleteComponent = (function () {
                     break;
                 case 13:
                     if (_this.filteredList.length > 0) {
-                        _this.selectOne(_this.filteredList[_this.itemIndex]);
+                        if (_this.itemIndex == 0 && _this.acceptUserInput) {
+                            _this.selectOne(evt.target.value);
+                        }
+                        else
+                            _this.selectOne(_this.filteredList[_this.itemIndex]);
+                    }
+                    else if (_this.acceptUserInput) {
+                        console.log("hi", evt.target.value);
+                        _this.selectOne(evt.target.value);
                     }
                     evt.preventDefault();
                     break;

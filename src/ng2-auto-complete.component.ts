@@ -184,10 +184,10 @@ export class Ng2AutoCompleteComponent implements OnInit {
   hideDropdownList(): void {
     this.dropdownVisible = false;
   }
-  
+
   findItemFromSelectValue(selectText: string): any {
     let matchingItems = this.filteredList
-                            .filter(item => ('' + item) === selectText);
+      .filter(item => ('' + item) === selectText);
     return matchingItems.length ? matchingItems[0] : null;
   }
 
@@ -277,8 +277,11 @@ export class Ng2AutoCompleteComponent implements OnInit {
 
       case 13: // ENTER, choose it!!
         if (this.filteredList.length > 0) {
-          this.selectOne(this.filteredList[this.itemIndex]);
+          if (this.itemIndex == 0 && this.acceptUserInput) { this.selectOne(evt.target.value) }
+          else
+            this.selectOne(this.filteredList[this.itemIndex]);
         }
+        else if (this.acceptUserInput) { console.log("hi",evt.target.value);this.selectOne(evt.target.value); }
         evt.preventDefault();
         break;
 
